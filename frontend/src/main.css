@@ -1,0 +1,21 @@
+.app-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.auth-panel {
+  position: relative;
+}
+
+.user-form {
+  display: none;
+}
+
+.user-form.active {
+  display: block;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  padding: 10px;
+  border: 1px solid black;
+}

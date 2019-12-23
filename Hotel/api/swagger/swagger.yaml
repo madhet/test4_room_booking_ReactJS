@@ -1,0 +1,47 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Swagger Petstore"
+  termsOfService: "http://swagger.io/terms/"
+host: "localhost:4000"
+basePath: "/"
+tags:
+- name: "user"
+  description: "Everything about your users"
+- name: "hall"
+  description: "Access to creation and viewing halls"
+- name: "ticket"
+  description: "Operations about ordering room in hotel"
+schemes:
+- "http"
+paths:
+  /signUp:
+    post:
+      tags:
+        - "user"
+      summary: "Sign up user in the application "
+      description: ""
+      operationId: "addPet"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Pet object that needs to be added to the store"
+          required: true
+          schema:
+            $ref: "#/definitions/Pet"
+      responses:
+        405:
+          description: "Invalid input"
+      security:
+        - petstore_auth:
+            - "write:pets"
+            - "read:pets"
+  
+
