@@ -1,7 +1,7 @@
 const API_URL = 'http://localhost:4000'
 const transport = fetch;
 
-const request = (transport, url, method = "GET", body = null) => {
+const request = (transport, url, method = "GET", body = null, auth) => {
   let options = {
     method: "",
     headers: {}
@@ -13,6 +13,9 @@ const request = (transport, url, method = "GET", body = null) => {
     } else if ((method === "POST" || method === "PATCH") && body) {
       options.body = JSON.stringify(body);
       options.headers["Content-Type"] = "application/json";
+      if (auth) {
+        options.headers["Authorization"] = auth;
+      }
     }
   }
   return transport(API_URL + url, options).then(
@@ -94,8 +97,26 @@ class RestInterfaceClass {
   getHalls() {
     return this.client(transport, '/halls')
   }
+  addHall(body, auth) {
+    return this.client(transport, '/halls', 'POST', body, auth)
+  }
+  delHall(hallId, auth) {
+    return this.client(transport, `/lists/${hallId}`, 'DELETE', null, auth)
+  }
   getTickets() {
     return this.client(transport, '/tickets')
+  }
+  getTicketsRange(from, to) {
+    return this.client(transport, `/ticketsparams/${from}/${to}`)
+  }
+  addTicket(body, auth) {
+    return this.client(transport, '/tickets', 'POST', body, auth)
+  }
+  editTicket(ticketId, body, auth) {
+    return this.client(transport, `/tickets/${ticketId}`, 'POST', body, auth)
+  }
+  delTicket(ticketId, auth) {
+    return this.client(transport, `/tickets/${ticketId}`, 'DELETE', null, auth)
   }
   // addList(body) {
   //   return this.client('/lists', 'POST', body)
