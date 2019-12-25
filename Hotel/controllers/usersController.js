@@ -33,7 +33,8 @@ module.exports = {
                     if (bcrypt.compareSync(req.body.password, doc.password)) {
                         const token = jwt.sign({doc}, process.env.SECRET, { expiresIn: '72h' });
                         res.status(200).json({
-                            _id:doc._id,
+                            _id: doc._id,
+			    isAdmin: doc.isAdmin,
                             token: `Barrier ${token}`});
                     }
                 }

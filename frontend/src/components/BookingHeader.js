@@ -1,20 +1,29 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
+import { NavLink } from 'react-router-dom'
 import AuthPanel from './AuthPanel/AuthPanel'
-import { userSetSigned } from '../redux/dispatchers'
+import { userSetSigned, getHalls, getTickets } from '../redux/dispatchers'
 
 function BookingHeader(props) {
 
-  const { userSetSigned } = props;
+  const { userSetSigned, getHalls, getTickets } = props;
 
   useEffect(() => {
     userSetSigned();
   })
 
+  useEffect(() => {
+    getHalls();
+  })
+
+  useEffect(() => {
+    getTickets();
+  })
+
   return (
     <div>
       <header className='app-header'>
-        <div>Room booking</div>
+        <div><NavLink to='/'>Room booking</NavLink></div>
         <AuthPanel />
       </header>
     </div>
@@ -26,7 +35,9 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = {
-  userSetSigned
+  userSetSigned,
+  getHalls,
+  getTickets
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(BookingHeader)

@@ -40,7 +40,7 @@ function AuthPanel(props) {
 
 const mapStateToProps = state => {
   // console.log(state)
-  return { mail: state.user.authUserMail };
+  return { mail: state.user.mail };
 }
 
 const mapDispatchToProps = {

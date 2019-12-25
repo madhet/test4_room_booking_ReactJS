@@ -4,8 +4,8 @@ import store from './redux/store'
 import { Provider } from 'react-redux'
 import { Switch, BrowserRouter, Route } from "react-router-dom";
 import BookingHeader from './components/BookingHeader'
-import HallForm from './components/HallForm'
-import HallList from './components/HallsList'
+import HallsList from './components/HallsList';
+import HallBook from './components/HallBook'
 
 function App() {
 
@@ -15,22 +15,16 @@ function App() {
         <div className="App">
           <BookingHeader />
           <div>
-            {/* <HallForm /> */}
             <Switch>
               <Route
                 exact={true}
                 path='/'
-                component={HallList}
+                render={routerProps => <HallsList routerProps={routerProps} />}
               />
               <Route
                 exact={true}
-                path='/hall-form'
-                component={HallForm}
-              />
-              <Route
-                exact={true}
-                path='/hall-list'
-                component={HallList}
+                path='/halls/:hallId'
+                render={routerProps => <HallBook routerProps={routerProps} />}
               />
             </Switch>
           </div>

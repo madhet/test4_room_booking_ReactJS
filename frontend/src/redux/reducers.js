@@ -2,10 +2,10 @@ import TYPES from './actions'
 import { combineReducers } from 'redux'
 
 const initialUser = {
-  authUser: '',
-  authUserMail: '',
-  authUserToken: '',
-  authUserAdmin: false,
+  id: '',
+  mail: '',
+  token: '',
+  admin: false,
 }
 
 function userReducer(state = initialUser, action) {
@@ -15,93 +15,91 @@ function userReducer(state = initialUser, action) {
     }
     case (TYPES.USER_SIGNIN): {
       return {
-        ...state,
-        authUser: action.payload.userId,
-        authUserMail: action.payload.userMail,
-        authUserToken: action.payload.userToken,
-        authUserAdmin: action.payload.userAdmin,
+        // ...state,
+        id: action.payload.userId,
+        mail: action.payload.userMail,
+        token: action.payload.userToken,
+        admin: action.payload.userAdmin,
       }
     }
     case (TYPES.USER_SIGNOUT): {
       return {
-        ...state,
-        authUser: '',
-        authUserMail: '',
-        authUserToken: '',
-        authUserAdmin: false,
+        // ...state,
+        id: '',
+        mail: '',
+        token: '',
+        admin: false,
       }
     }
     default:
       return state;
   }
 }
-
-const initialHalls = {
-  halls: null,
-}
-
-function hallReducer(state = initialHalls, action) {
+// const initialHalls = {
+//   halls: null,
+// }
+function hallReducer(state = [], action) {
   switch (action.type) {
     case (TYPES.HALLS_GET): {
-      return {
+      // console.log('payload', action.payload)
+      // console.log('payload', action.payload)
+      return [
         ...state,
-        halls: action.payload.halls
-      }
+        ...action.payload.halls
+      ]
     }
     case (TYPES.HALLS_ADD): {
       // console.log('USER_SIGNIN', action)
-      return {
+      return [
         ...state,
-        hall: state.halls.concat(action.payload.hall),
-      }
+        action.payload.hall,
+      ]
     }
     case (TYPES.HALLS_DEL): {
-      return {
-        ...state,
-        halls: state.halls.filter(hall => hall._id !== action.payload.hallId),
-      }
+      // console.log('del hall state', state)
+      // console.log('del hall payload', action.payload)
+      return [
+        // ...state,
+        ...state.filter(hall => hall._id !== action.payload.hallId),
+      ]
     }
     default:
       return state;
   }
 }
-
-const initialTickets = {
-  tickets: null,
-}
-
-function ticketReducer(state = initialTickets, action) {
+// const initialTickets = {
+//   tickets: null,
+// }
+function ticketReducer(state = [], action) {
   switch (action.type) {
     case (TYPES.TICKETS_GET_ALL): {
-      return {
+      return [
         ...state,
-        tickets: action.payload.halls
-      }
+        ...action.payload.tickets
+      ]
     }
     case (TYPES.TICKETS_GET_RANGE): {
       // console.log('USER_SIGNIN', action)
-      return {
+      return [
         ...state,
-        tickets: state.halls,
-      }
+        state.tickets,
+      ]
     }
     case (TYPES.TICKETS_ADD): {
-      return {
+      return [
         ...state,
-        tickets: state.halls,
-      }
+        action.payload.ticket,
+      ]
     }
     case (TYPES.TICKETS_EDIT): {
-      return {
-        ...state,
-        tickets: state.halls,
-      }
+      return [
+        state.map(ticket => ticket._id === action.payload.ticket._id ? action.payload.ticket : ticket),
+      ]
     }
     case (TYPES.TICKETS_DEL): {
-      return {
-        ...state,
-        tickets: state.halls,
-      }
+      return [
+        state.filter(ticket => ticket._id === action.payload.ticketId),
+      ]
     }
     default:
       return state;
@@ -110,8 +108,8 @@ function ticketReducer(state = initialTickets, action) {
 
 const rootReducer = combineReducers({
   user: userReducer,
-  hall: hallReducer,
-  ticket: ticketReducer
+  halls: hallReducer,
+  tickets: ticketReducer
 })
 
 export default rootReducer;

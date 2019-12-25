@@ -6,16 +6,14 @@ const request = (transport, url, method = "GET", body = null, auth) => {
     method: "",
     headers: {}
   };
-  if (method) {
-    options.method = method;
-    if (method === "PUT") {
-      options.body = body;
-    } else if ((method === "POST" || method === "PATCH") && body) {
+  options.method = method;
+  if (method !== 'GET') {
+    if (body) {
       options.body = JSON.stringify(body);
       options.headers["Content-Type"] = "application/json";
-      if (auth) {
-        options.headers["Authorization"] = auth;
-      }
+    }
+    if (auth) {
+      options.headers["Authorization"] = auth;
     }
   }
   return transport(API_URL + url, options).then(
@@ -23,13 +21,14 @@ const request = (transport, url, method = "GET", body = null, auth) => {
       if (res.status >= 200 && res.status <= 300) {
         return res.json();
       } else {
-        alert(res.status + " " + res.statusText);
+        // alert(res.status + " " + res.statusText);
+        throw new Error(res.status + "|" + res.statusText)
       }
     },
     rej => {
       throw rej;
     }
-  );
+  )
 };
 
 /*
@@ -57,33 +56,6 @@ example {
 Dev routes:
 method: DELETE  http://ec2-3-84-16-108.compute-1.amazonaws.com:4000/deleteall - Drop tickets collection;
 */
-// const restInterface = {
-//   userSignUp() {
-
-//   },
-//   getHalls() {
-//     return request('/halls')
-//   },
-//   getTickets() {
-//     return request('/tickets')
-//   },
-//   addList(body) {
-//     return request('/lists', 'POST', body)
-//   },
-//   delList(listId) {
-//     return request(`/lists/${listId}`, 'DELETE')
-//   },
-//   addItem(body) {
-//     return request('/items', 'POST', body)
-//   },
-//   delItem(itemId) {
-//     return request(`/items/${itemId}`, 'DELETE')
-//   },
-//   editItem(itemId, body) {
-//     return request(`/items/${itemId}`, 'PATCH', body)
-//   }
-// }
-
 class RestInterfaceClass {
   constructor(httpClient) {
     this.client = httpClient;
@@ -101,7 +73,7 @@ class RestInterfaceClass {
     return this.client(transport, '/halls', 'POST', body, auth)
   }
   delHall(hallId, auth) {
-    return this.client(transport, `/lists/${hallId}`, 'DELETE', null, auth)
+    return this.client(transport, `/halls/${hallId}`, 'DELETE', null, auth)
   }
   getTickets() {
     return this.client(transport, '/tickets')
@@ -112,30 +84,14 @@ class RestInterfaceClass {
   addTicket(body, auth) {
     return this.client(transport, '/tickets', 'POST', body, auth)
   }
-  editTicket(ticketId, body, auth) {
-    return this.client(transport, `/tickets/${ticketId}`, 'POST', body, auth)
+  updTicket(ticketId, body, auth) {
+    return this.client(transport, `/tickets/${ticketId}`, 'PUT', body, auth)
   }
   delTicket(ticketId, auth) {
     return this.client(transport, `/tickets/${ticketId}`, 'DELETE', null, auth)
   }
-  // addList(body) {
-  //   return this.client('/lists', 'POST', body)
-  // }
-  // delList(listId) {
-  //   return this.client(`/lists/${listId}`, 'DELETE')
-  // }
-  // addItem(body) {
-  //   return this.client('/items', 'POST', body)
-  // }
-  // delItem(itemId) {
-  //   return this.client(`/items/${itemId}`, 'DELETE')
-  // }
-  // editItem(itemId, body) {
-  //   return this.client(`/items/${itemId}`, 'PATCH', body)
-  // }
 }
 
-// const apiClient = Object.create(restInterface);
 const restClient = new RestInterfaceClass(request)
-// console.log('API CLIENTY', apiClient)
+
 export default restClient;

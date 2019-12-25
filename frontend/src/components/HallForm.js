@@ -3,16 +3,32 @@ import { connect } from 'react-redux'
 import { addHall } from '../redux/dispatchers'
 
 function HallForm(props) {
-  const { auth, addHall } = props
+  const { auth, toggleShowForm, addHall } = props
 
-  console.log('hall-form-props', props)
+  // console.log('hall-form-props', props)
 
   const [hallTitle, setTitle] = useState('');
   const [hallDescription, setDescription] = useState('');
   const [hallPhoto, setPhoto] = useState(null);
+  const [inputFile, setInputFile] = useState(null);
 
   const changeInputFile = event => {
+    setInputFile(event.target);
+    if (!event.target.files.length) return;
     let file = event.target.files[0];
+    if (
+      !["image/jpg", "image/jpeg", "image/png"].includes(
+        file.type
+      )
+    ) {
+      alert("Unsupported filetype!");
+      event.target.value = "";
+      return;
+    } else if (file.size > 80 * 1024) {
+      alert("File is too big!");
+      event.target.value = "";
+      return;
+    }
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
@@ -31,6 +47,9 @@ function HallForm(props) {
     setTitle('')
     setDescription('')
     setPhoto(null)
+    inputFile.value = ''
+    setInputFile(null)
+    // toggleShowForm()
   }
   // console.log('hall props', props)
   return (
@@ -45,13 +64,13 @@ function HallForm(props) {
           <textarea id="description" name="description" cols="30" rows="10" required value={hallDescription} onChange={e => setDescription(e.target.value)}></textarea>
         </div>
         <div><label htmlFor="photo">Photo: </label>
-          <input type="file" id="photo" name="photo" onChange={e => changeInputFile(e)} />
-        </div>
-        <div>
-          <button onClick={clickCreateHall}>Create</button>
-          <button>Cancel</button>
+          <input type="file" id="photo" name="photo" accept=".jpg, .jpeg, .png" onChange={e => changeInputFile(e)} />
         </div>
       </form>
+      <div>
+        <button onClick={clickCreateHall}>Create</button>
+        <button onClick={toggleShowForm}>Cancel</button>
+      </div>
     </div>
   )
 }

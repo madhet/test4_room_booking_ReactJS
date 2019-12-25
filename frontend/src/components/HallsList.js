@@ -1,19 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import HallForm from './HallForm'
-import { getHalls } from '../redux/dispatchers'
+import HallsItem from './HallsItem';
 
-function HallsViewer(props) {
+function HallsList(props) {
 
-  const { user, halls, getHalls } = props;
-  console.log('props', props)
+  const { user, admin, halls, routerProps } = props;
+  // console.log('hall list props', props)
   const [showHallForm, setShowForm] = useState(false)
-
-  useEffect(() => {
-    if (!halls) {
-      getHalls()
-    }
-  }, [halls])
 
   function toggleShowForm() {
     setShowForm(!showHallForm)
@@ -21,10 +15,16 @@ function HallsViewer(props) {
 
   return (
     <div>
-      {user && <div><button onClick={toggleShowForm}>Create hall</button></div>}
-      {showHallForm && <HallForm />}
+      <div>
+        {admin && <div><button onClick={toggleShowForm}>Create hall</button></div>}
+        {showHallForm && <HallForm toggleShowForm={toggleShowForm} />}
+      </div>
       {halls && halls.length ? (
-        <div>Halls</div>
+        <div>
+          {halls.map(hall =>
+            <HallsItem key={hall} hallId={hall} routerProps={routerProps} />
+          )}
+        </div>
       ) : (
           <div>No halls</div>
         )
@@ -34,15 +34,15 @@ function HallsViewer(props) {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
+  // console.log('halls list state', state)
   return {
-    user: state.user.authUser,
-    halls: state.hall.halls
+    user: state.user.id,
+    admin: state.user.admin,
+    halls: state.halls.map(hall => hall._id)
   }
 }
 
 const mapDispatchToProps = {
-  getHalls
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HallsViewer)
+export default connect(mapStateToProps, mapDispatchToProps)(HallsList)
