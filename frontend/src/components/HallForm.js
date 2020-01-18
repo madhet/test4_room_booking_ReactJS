@@ -5,28 +5,83 @@ import { addHall } from '../redux/dispatchers'
 function HallForm(props) {
   const { auth, toggleShowForm, addHall } = props
 
-  // console.log('hall-form-props', props)
-
   const [hallTitle, setTitle] = useState('');
   const [hallDescription, setDescription] = useState('');
   const [hallPhoto, setPhoto] = useState(null);
   const [inputFile, setInputFile] = useState(null);
+  const [fieldError, setFieldError] = useState({ title: '', description: '', image: '' })
+
+  function validateField() {
+    let isValid = true;
+    if (!hallTitle) {
+      setFieldError(prevState => {
+        return { ...prevState, title: 'Field is required' }
+      })
+      isValid = false;
+    }
+    if (!hallDescription) {
+      setFieldError(prevState => {
+        return { ...prevState, description: 'Field is required' }
+      })
+      isValid = false;
+    }
+    if (fieldError.image) {
+      isValid = false;
+    }
+    return isValid;
+  }
+
+  function changeInput(event) {
+    switch (event.target.name) {
+      case 'title': {
+        if (fieldError.title) {
+          setFieldError(prevState => {
+            return { ...prevState, title: '' }
+          })
+        }
+        setTitle(event.target.value)
+        break;
+      }
+      case 'description': {
+        if (fieldError.description) {
+          setFieldError(prevState => {
+            return { ...prevState, description: '' }
+          })
+        }
+        setDescription(event.target.value)
+        break;
+      }
+      default:
+        break;
+    }
+  }
 
   const changeInputFile = event => {
-    setInputFile(event.target);
-    if (!event.target.files.length) return;
+    if (!inputFile) setInputFile(event.target);
+    if (fieldError.image) {
+      setFieldError(prevState => {
+        return { ...prevState, image: '' }
+      })
+    }
+    if (!event.target.files.length) {
+      return;
+    }
     let file = event.target.files[0];
     if (
       !["image/jpg", "image/jpeg", "image/png"].includes(
         file.type
       )
     ) {
-      alert("Unsupported filetype!");
-      event.target.value = "";
+      setFieldError(prevState => {
+        return { ...prevState, image: 'Unsupported filetype!' }
+      })
+      // event.target.value = "";
       return;
     } else if (file.size > 80 * 1024) {
-      alert("File is too big!");
-      event.target.value = "";
+      setFieldError(prevState => {
+        return { ...prevState, image: "File is too big!" }
+      })
+      // event.target.value = "";
       return;
     }
     let reader = new FileReader();
@@ -36,47 +91,63 @@ function HallForm(props) {
     };
   };
 
-  function clickCreateHall() {
-    if (!hallTitle || !hallDescription) return;
+  function clickCreateHall(event) {
+    console.log(event)
+    event.preventDefault();
+    if (!validateField()) return;
     let body = {
       title: hallTitle,
       description: hallDescription,
       imageURL: hallPhoto
     }
     addHall(body, auth);
+    clearForm()
+  }
+
+  function clearForm() {
     setTitle('')
     setDescription('')
     setPhoto(null)
-    inputFile.value = ''
-    setInputFile(null)
-    // toggleShowForm()
+    if (inputFile) {
+      inputFile.value = ''
+      setInputFile(null)
+    }
   }
-  // console.log('hall props', props)
+
+  function closeForm() {
+    clearForm()
+    toggleShowForm()
+  }
+
   return (
     <div className='hall-form-wrapper'>
-      <form>
-        <div>
-          <label htmlFor="title">Title: </label>
-          <input type="text" id="title" name="title" required value={hallTitle} onChange={e => setTitle(e.target.value)} />
+      <form className='hall-form' onSubmit={e => e.preventDefault()}>
+        <div className='input-wrapper'>
+          <label className='input-label' htmlFor="title">Title: </label>
+          <input className={'input-field' + (fieldError.title ? ' error' : '')} type="text" id="title" name="title" required value={hallTitle} onChange={changeInput} />
+          <div className={'input-error' + (fieldError.title ? ' error' : '')}>Field is required</div>
+        </div>
+        <div className='input-wrapper'>
+          <label className='input-label' htmlFor="description">Description: </label>
+          <textarea className={'input-field' + (fieldError.description ? ' error' : '')} id="description" name="description" cols="30" rows="10" required value={hallDescription} onChange={changeInput}></textarea>
+          <div className={'input-error' + (fieldError.description ? ' error' : '')}>Field is required</div>
         </div>
         <div>
-          <label htmlFor="description">Description: </label>
-          <textarea id="description" name="description" cols="30" rows="10" required value={hallDescription} onChange={e => setDescription(e.target.value)}></textarea>
-        </div>
-        <div><label htmlFor="photo">Photo: </label>
-          <input type="file" id="photo" name="photo" accept=".jpg, .jpeg, .png" onChange={e => changeInputFile(e)} />
+          <label className='input-label' htmlFor="photo">Photo (jpg, jpeg, png; less then 80 Kb): </label>
+          <input className={'input-field' + (fieldError.image ? ' error' : '')} type="file" id="photo" name="photo" accept=".jpg, .jpeg, .png" onChange={e => changeInputFile(e)} />
+          <div className={'input-error' + (fieldError.image ? ' error' : '')}>{fieldError.image ? fieldError.image : 'Invalid filetype'}</div>
         </div>
       </form>
       <div>
-        <button onClick={clickCreateHall}>Create</button>
-        <button onClick={toggleShowForm}>Cancel</button>
+        <button className='booking-button' onClick={clickCreateHall}>Create</button>
+        <button className='booking-button' onClick={closeForm}>Cancel</button>
       </div>
     </div>
   )
 }
 
 const mapStateToProps = state => {
-  return { auth: state.user.authUserToken }
+  return { auth: state.user.token }
 }
 
 const mapDispatchToProps = {

@@ -1,15 +1,19 @@
-
 export default {
-  USER_SIGNIN: 'sign-in',
-  USER_SIGNUP: 'sign-up',
-  USER_SIGNOUT: 'sign-out',
-  HALLS_GET: 'get-halls',
-  HALLS_ADD: 'add-hall',
-  HALLS_DEL: 'del-hall',
-  TICKETS_GET_ALL: 'get-all-tickets',
-  TICKETS_GET_RANGE: 'get-range-tickets',
-  TICKETS_ADD: 'add-ticket',
-  TICKETS_EDIT: 'edit-ticket',
-  TICKETS_DEL: 'del-ticket',
-}
-
+	SERVER_SET_STATUS: "set-server-status",
+	MESSAGE_SET_SUCCESS: "set-success-message",
+	MESSAGE_SET_ERROR: "set-error-message",
+	MESSAGE_CLEAR: "clear-message",
+	USER_SIGNIN: "sign-in",
+	USER_SIGNUP: "sign-up",
+	USER_SIGNOUT: "sign-out",
+	HALLS_SET_ACTIVE: "set-active-hall",
+	HALLS_GET: "get-halls",
+	HALLS_ADD: "add-hall",
+	HALLS_DEL: "del-hall",
+	TICKETS_SET_ACTIVE: "set-active-ticket",
+	TICKETS_GET_ALL: "get-all-tickets",
+	TICKETS_GET_RANGE: "get-range-tickets",
+	TICKETS_ADD: "add-ticket",
+	TICKETS_EDIT: "edit-ticket",
+	TICKETS_DEL: "del-ticket",
+};

@@ -1,22 +1,305 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+textarea {
+  resize: none;
+}
+
+.substitute-message {
+  padding: 10px;
+  line-height: 1.6rem;
+  font-size: 1.2rem;
+}
+
+.booking-button {
+  min-width: 90px;
+  box-sizing: border-box;
+  padding: 3px;
+  margin: 0 5px;
+  border: 1px solid #003580;
+  outline: none;
+  background: none;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 1.1rem;
+  color: #003580;
+  cursor: pointer;
+}
+
+.booking-button:first-child {
+  margin-left: 0px;
+}
+
+.booking-button:last-child {
+  margin-right: 0px;
+}
+
+.booking-button:disabled {
+  border: 1px solid #aaaaaa;
+  color: #aaaaaa;
+}
+
+.disabled {
+  color: #aaaaaa;
+}
+
+.button-panel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.input-label {
+  display: block;
+  line-height: 1.6rem;
+  font-size: 1.2rem;
+}
+
+.inline-label {
+  display: inline-block;
+  padding-right: 10px;
+}
+
+.input-field {
+  display: block;
+  width: 100%;
+  border: 1px solid #aaaaaa;
+  font-family: inherit;
+  font-size: 1.2rem;
+  line-height: 1.6rem;
+}
+
+.input-field[type="file"] {
+  border: none;
+}
+
+.input-field[type="checkbox"] {
+  display: inline-block;
+  width: unset;
+  margin-right: 5px;
+}
+
+.input-field.input-select {
+  display: inline-block;
+  width: unset;
+}
+
+.input-field.error {
+  border: 1px solid red;
+}
+
+.input-error {
+  visibility: hidden;
+  line-height: 1.6rem;
+  font-size: 1.2rem;
+}
+
+.input-error.error {
+  visibility: visible;
+  line-height: 1.6rem;
+  font-size: 1.2rem;
+  color: red;
+}
+
+.input-button {
+  width: 100%;
+  margin: 10px 0 0 0;
+}
+
 .app-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.app-logo {
+  padding: 5px;
+  border: 1px solid #003580;
+  border-radius: 10px;
+  font-size: 1.8rem;
+  text-transform: capitalize;
+  color: #003580;
+}
+
+.app-logo a {
+  color: #003580;
+}
+
+.app-logo a:hover {
+  color: #003580;
 }
 
 .auth-panel {
   position: relative;
 }
 
-.user-form {
-  display: none;
+.auth-panel-text {
+  line-height: 1.4rem;
+  font-size: 1.2rem;
 }
 
-.user-form.active {
-  display: block;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  z-index: 10;
+.user-form-wrapper {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.4);
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 0;
+  transition: 0.3s;
+  visibility: hidden;
+}
+
+.user-form-wrapper.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.user-form {
+  width: 300px;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.hall-edit {
   padding: 10px;
-  border: 1px solid black;
+}
+
+.hall-list {
+  display: flex;
+  flex-wrap: wrap;
+  /* column-count: 2; */
+  /* column-fill: balance; */
+  /* padding: 10px; */
+}
+
+.hall-item {
+  flex-basis: 50%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hall-card {
+  padding: 10px 0;
+}
+
+.hall-image img {
+  max-width: 100%;
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  
+}
+
+.hall-title {
+  line-height: 2rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.hall-description {
+  line-height: 1.4rem;
+  font-size: 1.2rem;
+}
+
+.hall-form {
+  max-width: 500px;
+  padding: 10px 0;
+}
+
+.hall-tickets {
+  padding: 10px;
+}
+
+.hall-card-container {
+  max-width: 70%;
+  margin: 0 auto;
+}
+
+.ticket-list {
+  max-width: 70%;
+  margin: 0 auto;
+  padding: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.ticket-item {
+  flex-basis: 30%;
+  margin: 5px 5px;
+  padding: 10px;
+  border: 1px solid #003580;
+  border-radius: 10px;
+}
+
+.ticket-title {
+  line-height: 2rem;
+  font-size: 1.4rem;
+}
+
+.ticket-date {
+  line-height: 1.6rem;
+  font-size: 1.2rem;
+
+}
+
+.hall-book-wrapper {
+  padding: 10px;
+}
+
+.book-form {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.calendar-container {
+  padding: 10px 0;
+  /* max-width: 75%;
+  margin: 0 auto; */
+  /* text-align: center; */
+}
+
+.timepicker-panel {
+  display: flex;
+  /* justify-content: flex-start; */
+  align-items: center;
+}
+
+.timepicker-container {
+  padding-left: 15px;
+}
+
+@keyframes p-progress-spinner-color {
+  100%,
+  0% {
+      stroke: #003580;
+  }
+  40% {
+      stroke: #003580;
+  }
+  66% {
+      stroke: #003580;
+  }
+  80%,
+  90% {
+      stroke: #003580;
+  }
 }

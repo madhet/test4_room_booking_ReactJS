@@ -8,15 +8,63 @@ function UserForm(props) {
   const [userEmail, setEmail] = useState('')
   const [userPwd, setPwd] = useState('')
   const [userAdmin, setAdmin] = useState(false)
+  const [fieldError, setFieldError] = useState({ email: '', password: '' })
+
+  const fieldTemplate = {
+    email: /^([\w.-]+)@([\w-]+\.)+([\w]{2,})$/i,
+    password: /^[0-9a-zA-Z]{3,50}$/i,
+  }
+
+  function validateField() {
+    let isValid = true;
+    if (!fieldTemplate.email.test(userEmail)) {
+      setFieldError(prevState => {
+        return { ...prevState, email: '' }
+      })
+      isValid = false;
+    }
+    if (!fieldTemplate.password.test(userPwd)) {
+      setFieldError(prevState => {
+        return { ...prevState, password: '' }
+      })
+      isValid = false;
+    }
+    return isValid;
+  }
+
+  function changeInput(event) {
+    switch (event.target.name) {
+      case 'email': {
+        if (fieldError.email) {
+          setFieldError(prevState => {
+            return { ...prevState, email: 'Incorrect email' }
+          })
+        }
+        setEmail(event.target.value)
+        break;
+      }
+      case 'password': {
+        if (fieldError.password) {
+          setFieldError(prevState => {
+            return { ...prevState, password: 'Incorrect password' }
+          })
+        }
+        setPwd(event.target.value)
+        break;
+      }
+      default:
+        break;
+    }
+  }
 
   const userSign = (event) => {
     event.preventDefault()
+    if (!validateField()) return;
     let body = {
       email: userEmail,
       password: userPwd,
     }
     if (signUp) {
-      console.log('userAdmin', userAdmin)
       body.isAdmin = userAdmin
     }
     if (signUp) {
@@ -24,33 +72,42 @@ function UserForm(props) {
     } else {
       userSignIn(body)
     }
+    closeForm();
+  }
+
+  function clearForm() {
     setEmail('');
     setPwd('');
     setAdmin(false);
+    setFieldError({ email: '', password: '' })
+  }
+
+  function closeForm() {
+    clearForm();
     hideForm();
   }
 
   return (
-    <div className={`user-form${show ? ' active' : ''}`}>
-      <div className='sign-form-wrapper'>
-        <form className='sign-form'>
+    <div className={`user-form-wrapper${show ? ' open' : ''}`} onClick={closeForm} >
+      <form className='user-form' onClick={e => e.stopPropagation()} >
+        <div className='input-wrapper'>
+          <label className='input-label' htmlFor="email">Email:</label>
+          <input className={'input-field' + (fieldError.email ? ' error' : '')} type="email" id="email" name="email" value={userEmail} onChange={changeInput} />
+          <div className={'input-error' + (fieldError.email ? ' error' : '')}>Incorrect email</div>
+        </div>
+        <div className='input-wrapper'>
+          <label className='input-label' htmlFor="password">{signUp ? 'Password (min 3 character):' : 'Password:'}</label>
+          <input className={'input-field' + (fieldError.password ? ' error' : '')} type="password" id="password" name="password" value={userPwd} onChange={changeInput} />
+          <div className={'input-error' + (fieldError.password ? ' error' : '')}>Incorrect password</div>
+        </div>
+        {signUp &&
           <div>
-            <label htmlFor="email">Email </label><input type="email" id="email" name="email" value={userEmail} onChange={e => setEmail(e.target.value)} />
+            <label className='input-label inline-label' htmlFor="admin">Admin</label>
+            <input className='input-field' type="checkbox" id="admin" name="admin" checked={userAdmin} onChange={e => setAdmin(e.target.checked)} />
           </div>
-          <div>
-            <label htmlFor="password">Password </label><input type="password" id="password" name="password" value={userPwd} onChange={e => setPwd(e.target.value)} />
-          </div>
-          {signUp &&
-            <div>
-              <label htmlFor="admin">Admin </label><input type="checkbox" id="admin" name="admin" checked={userAdmin} onChange={e => setAdmin(e.target.checked)} />
-            </div>
-          }
-          <div>
-            <button onClick={e => userSign(e)}>{signUp ? 'Sign up' : 'Sign in'}</button>
-            <button onClick={hideForm}>Cancel</button>
-          </div>
-        </form>
-      </div>
+        }
+        <button className='booking-button input-button' onClick={userSign}>{signUp ? 'Sign up' : 'Sign in'}</button>
+      </form>
     </div>
   )
 }

@@ -1,35 +1,19 @@
 import React from 'react';
-import './main.css'
 import store from './redux/store'
 import { Provider } from 'react-redux'
-import { Switch, BrowserRouter, Route } from "react-router-dom";
-import BookingHeader from './components/BookingHeader'
-import HallsList from './components/HallsList';
-import HallBook from './components/HallBook'
+import Booking from './components/Booking'
+import "primereact/resources/themes/nova-light/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+import './main.css'
 
 function App() {
 
   return (
     <Provider store={store}>
-      <BrowserRouter>
-        <div className="App">
-          <BookingHeader />
-          <div>
-            <Switch>
-              <Route
-                exact={true}
-                path='/'
-                render={routerProps => <HallsList routerProps={routerProps} />}
-              />
-              <Route
-                exact={true}
-                path='/halls/:hallId'
-                render={routerProps => <HallBook routerProps={routerProps} />}
-              />
-            </Switch>
-          </div>
-        </div>
-      </BrowserRouter>
+      <div className="App">
+        <Booking />
+      </div>
     </Provider>
   );
 }

@@ -17,15 +17,19 @@ const request = (transport, url, method = "GET", body = null, auth) => {
     }
   }
   return transport(API_URL + url, options).then(
-    res => {
+    async res => {
       if (res.status >= 200 && res.status <= 300) {
         return res.json();
       } else {
-        // alert(res.status + " " + res.statusText);
-        throw new Error(res.status + "|" + res.statusText)
+        const data = await res.json()
+        throw new Error(data.message)
+        // throw new Error(res.status + "|" + res.statusText)
       }
     },
     rej => {
+      if (rej.message === 'Failed to fetch') {
+        throw new Error('No connection to server!')
+      }
       throw rej;
     }
   )
@@ -85,7 +89,7 @@ class RestInterfaceClass {
     return this.client(transport, '/tickets', 'POST', body, auth)
   }
   updTicket(ticketId, body, auth) {
-    return this.client(transport, `/tickets/${ticketId}`, 'PUT', body, auth)
+    return this.client(transport, `/ticket/${ticketId}`, 'PUT', body, auth)
   }
   delTicket(ticketId, auth) {
     return this.client(transport, `/tickets/${ticketId}`, 'DELETE', null, auth)

@@ -1,42 +1,58 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { delHall } from '../redux/dispatchers'
-import { NavLink } from 'react-router-dom'
 import HallCard from './HallCard'
 
 function HallsItem(props) {
-  // console.log('hall item props', props)
-  const { user, admin, hallId, hall, auth, delHall } = props;
+
+  const { user, admin, auth, hasTickets, hallId, hall, delHall, routerProps } = props;
+
+  function clickDeleteHall() {
+    delHall(hallId, auth)
+  }
+
+  function clickShowTickets() {
+    routerProps.history.push(`/tickets/${hallId}`)
+  }
+
+  function clickBookRoom() {
+    routerProps.history.push(`/halls/${hallId}`)
+  }
+
   return (
-    <div>
+    <div className='hall-item'>
       <HallCard hall={hall} />
-      {/* <div><img src={hall.imageURL} alt="" /></div>
-      <div>{hallId}</div>
-      <div>{hall.title}</div>
-      <div>{hall.description}</div> */}
-      {admin && <button onClick={() => delHall(hallId, auth)}>Delete hall</button>}
-      {
-        user &&
+      <div className='button-panel'>
         <div>
-          <NavLink to={`/halls/${hallId}`}>Book room</NavLink>
+          <button className='booking-button' onClick={clickBookRoom}>{user ? 'Book room' : 'View'}</button>
+          {user && hasTickets && <button className='booking-button' onClick={clickShowTickets}>My tickets</button>}
         </div>
-      }
+        {admin &&
+          <div>
+            <button className='booking-button' onClick={clickDeleteHall}>Delete hall</button>
+          </div>
+        }
+      </div>
     </div>
   )
 }
 
 const mapStateToProps = (state, ownProps) => {
-  // console.log('hall item state', state)
+  // console.log('hall-item-state', state)
+  let hallId = ownProps.hallId;
+  let userId = state.user.id;
+  let hasTickets = state.tickets.some(ticket => ticket.hall_id === hallId && ticket.user_id === userId)
   return {
-    user: state.user.id,
+    user: userId,
     admin: state.user.admin,
     auth: state.user.token,
-    hall: state.halls.find(hall => hall._id === ownProps.hallId)
+    hall: state.halls.find(hall => hall._id === hallId),
+    hasTickets
   }
 }
 
 const mapDispatchToProps = {
-  delHall
+  delHall,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HallsItem)

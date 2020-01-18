@@ -1,15 +1,14 @@
 import React from 'react'
 
 export default function HallCard(props) {
-  // console.log('hall card props', props)
-  const { id, title, description, imageURL } = props.hall;
+
+  const { title, description, imageURL } = props.hall;
 
   return (
-    <div>
-      <div><img src={imageURL} alt="" /></div>
-      <div>{id}</div>
-      <div>{title}</div>
-      <div>{description}</div>
+    <div className='hall-card'>
+      <div className='hall-image'>{imageURL ? <img src={imageURL} alt="imageURL" /> : <div>No image</div>}</div>
+      <div className='hall-title'>{title}</div>
+      <div className='hall-description'>{description}</div>
     </div>
   )
 }

@@ -2,31 +2,43 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import HallForm from './HallForm'
 import HallsItem from './HallsItem';
+import { ProgressSpinner } from 'primereact/progressspinner';
 
 function HallsList(props) {
 
-  const { user, admin, halls, routerProps } = props;
-  // console.log('hall list props', props)
+  const { server, admin, halls, routerProps } = props;
+
   const [showHallForm, setShowForm] = useState(false)
 
   function toggleShowForm() {
     setShowForm(!showHallForm)
   }
 
+  if (server) {
+    return (
+      <div className='substitute-message'>{server}</div>
+    )
+  }
+
   return (
     <div>
-      <div>
-        {admin && <div><button onClick={toggleShowForm}>Create hall</button></div>}
-        {showHallForm && <HallForm toggleShowForm={toggleShowForm} />}
-      </div>
+      {admin &&
+        <div className='hall-edit'>
+          <div>
+            <button className='booking-button' onClick={toggleShowForm}>{showHallForm ? 'Hide' : 'Create hall'}</button>
+          </div>
+          {showHallForm && <HallForm toggleShowForm={toggleShowForm} />}
+        </div>
+      }
       {halls && halls.length ? (
-        <div>
+        <div className='hall-list'>
           {halls.map(hall =>
             <HallsItem key={hall} hallId={hall} routerProps={routerProps} />
           )}
         </div>
       ) : (
-          <div>No halls</div>
+          <div className='substitute-message'>No halls</div>
+          // <ProgressSpinner />
         )
       }
     </div >
@@ -34,9 +46,8 @@ function HallsList(props) {
 }
 
 const mapStateToProps = state => {
-  // console.log('halls list state', state)
   return {
-    user: state.user.id,
+    server: state.server,
     admin: state.user.admin,
     halls: state.halls.map(hall => hall._id)
   }
