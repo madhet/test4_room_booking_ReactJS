@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import HallForm from './HallForm'
 import HallsItem from './HallsItem';
-import { ProgressSpinner } from 'primereact/progressspinner';
 
 function HallsList(props) {
 
@@ -38,7 +37,6 @@ function HallsList(props) {
         </div>
       ) : (
           <div className='substitute-message'>No halls</div>
-          // <ProgressSpinner />
         )
       }
     </div >

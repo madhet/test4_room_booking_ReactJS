@@ -5,10 +5,10 @@ import HallCard from './HallCard'
 
 function HallsItem(props) {
 
-  const { user, admin, auth, hasTickets, hallId, hall, delHall, routerProps } = props;
+  const { user, admin, hasTickets, hallId, hall, delHall, routerProps } = props;
 
   function clickDeleteHall() {
-    delHall(hallId, auth)
+    delHall(hallId)
   }
 
   function clickShowTickets() {
@@ -45,7 +45,6 @@ const mapStateToProps = (state, ownProps) => {
   return {
     user: userId,
     admin: state.user.admin,
-    auth: state.user.token,
     hall: state.halls.find(hall => hall._id === hallId),
     hasTickets
   }

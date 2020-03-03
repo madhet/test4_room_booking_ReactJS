@@ -5,7 +5,7 @@ import { setActiveTicket, delTicket } from '../redux/dispatchers'
 
 function TicketsList(props) {
 
-  const { auth, hallId, tickets, setActiveTicket, delTicket, routerProps } = props;
+  const { hallId, tickets, setActiveTicket, delTicket, routerProps } = props;
 
   function clickEditTicket(ticketId) {
     setActiveTicket(ticketId)
@@ -22,7 +22,7 @@ function TicketsList(props) {
             <div className='ticket-date'>{'To: ' + (moment(ticket.to).hours() ? moment(ticket.to).format('YYYY-MM-DD HH:mm') : moment(ticket.to).format('YYYY-MM-DD'))}</div>
             <div>
               <button className='booking-button' onClick={() => clickEditTicket(ticket._id)}>Edit</button>
-              <button className='booking-button' onClick={() => delTicket(ticket._id, auth)}>Delete</button>
+              <button className='booking-button' onClick={() => delTicket(ticket._id)}>Delete</button>
             </div>
           </li>
         )}
@@ -41,7 +41,6 @@ const mapStateToProps = (state, ownProps) => {
   let hallId = ownProps.routerProps.match.params.hallId;
   let userId = state.user.id;
   return {
-    auth: state.user.token,
     hallId,
     tickets: state.tickets.filter(ticket => ticket.hall_id === hallId && ticket.user_id === userId)
   }

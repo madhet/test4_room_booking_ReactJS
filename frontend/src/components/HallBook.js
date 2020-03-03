@@ -52,7 +52,7 @@ function getAvailableHours(disabledHours) {
 
 function HallBook(props) {
 
-	const { auth, user, hasTickets, hall, activeTicket, tickets, setActiveTicket, addTicket, updTicket, messageSetError, routerProps } = props;
+	const { user, hasTickets, hall, activeTicket, tickets, setActiveTicket, addTicket, updTicket, messageSetError, routerProps } = props;
 
 	const [dates, setDates] = useState([]);
 	const [title, setTitle] = useState("");
@@ -316,10 +316,10 @@ function HallBook(props) {
 			title: title,
 		};
 		if (editMode) {
-			updTicket(activeTicket._id, body, auth);
+			updTicket(activeTicket._id, body);
 			routerProps.history.push(`/tickets/${hall._id}`);
 		} else {
-			addTicket(body, auth);
+			addTicket(body);
 			clearSelectedDates();
 		}
 	}
@@ -435,7 +435,6 @@ const mapStateToProps = (state, ownProps) => {
 	let activeTicket = state.activeTicket ? state.tickets.find(ticket => ticket._id === state.activeTicket) : null
 	return {
 		user: userId,
-		auth: state.user.token,
 		hasTickets,
 		activeTicket,
 		hall: state.halls.find(hall => hall._id === hallId),

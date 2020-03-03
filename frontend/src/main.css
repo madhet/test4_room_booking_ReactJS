@@ -3,6 +3,8 @@ body {
   padding: 0;
   overflow-x: hidden;
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  /* background-image: url('./images/room2.jpg'); */
+  background-color: rgba(0, 0, 127, 0.5);
 }
 
 ul {

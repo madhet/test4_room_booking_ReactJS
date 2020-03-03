@@ -135,8 +135,9 @@ export function getHalls() {
 	};
 }
 
-export function addHall(body, auth) {
-	return function (dispatch) {
+export function addHall(body) {
+	return function (dispatch, getState) {
+		const auth = getState().user.token;
 		restClient
 			.addHall(body, auth)
 			.then(data => {
@@ -150,8 +151,9 @@ export function addHall(body, auth) {
 	};
 }
 
-export function delHall(hallId, auth) {
-	return function (dispatch) {
+export function delHall(hallId) {
+	return function (dispatch, getState) {
+		const auth = getState().user.token;
 		restClient
 			.delHall(hallId, auth)
 			.then(data => {
@@ -193,8 +195,9 @@ export function getTickets() {
 	};
 }
 
-export function addTicket(body, auth) {
-	return function (dispatch) {
+export function addTicket(body) {
+	return function (dispatch, getState) {
+		const auth = getState().user.token;
 		restClient
 			.addTicket(body, auth)
 			.then(data => {
@@ -214,8 +217,9 @@ export function addTicket(body, auth) {
 	};
 }
 
-export function updTicket(ticketId, body, auth) {
-	return function (dispatch) {
+export function updTicket(ticketId, body) {
+	return function (dispatch, getState) {
+		const auth = getState().user.token;
 		restClient
 			.updTicket(ticketId, body, auth)
 			.then(data => {
@@ -234,8 +238,9 @@ export function updTicket(ticketId, body, auth) {
 	};
 }
 
-export function delTicket(ticketId, auth) {
-	return function (dispatch) {
+export function delTicket(ticketId) {
+	return function (dispatch, getState) {
+		const auth = getState().user.token;
 		restClient
 			.delTicket(ticketId, auth)
 			.then(data => {

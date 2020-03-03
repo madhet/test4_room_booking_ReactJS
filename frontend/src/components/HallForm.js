@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { addHall } from '../redux/dispatchers'
 
 function HallForm(props) {
-  const { auth, toggleShowForm, addHall } = props
+  const { toggleShowForm, addHall } = props
 
   const [hallTitle, setTitle] = useState('');
   const [hallDescription, setDescription] = useState('');
@@ -92,7 +92,6 @@ function HallForm(props) {
   };
 
   function clickCreateHall(event) {
-    console.log(event)
     event.preventDefault();
     if (!validateField()) return;
     let body = {
@@ -100,7 +99,7 @@ function HallForm(props) {
       description: hallDescription,
       imageURL: hallPhoto
     }
-    addHall(body, auth);
+    addHall(body);
     clearForm()
   }
 
@@ -147,7 +146,7 @@ function HallForm(props) {
 }
 
 const mapStateToProps = state => {
-  return { auth: state.user.token }
+  return {}
 }
 
 const mapDispatchToProps = {
